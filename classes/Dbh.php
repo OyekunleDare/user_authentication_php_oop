@@ -9,8 +9,8 @@ class Dbh{
 		try {
 			$db = new mysqli($host, $username, $password, $dbname);
 			return $db;
-		}catch (\mysqli_sql_exception $e) {
-     		throw new \mysqli_sql_exception($e->getMessage(), $e->getCode());
+		}catch (mysqli_sql_exception $e) {
+     			throw new mysqli_sql_exception($e->getMessage(), $e->getCode());
 		}
 	}
 }
