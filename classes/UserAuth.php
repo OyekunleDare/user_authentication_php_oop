@@ -83,7 +83,7 @@ class UserAuth extends Dbh{
                     <input type='hidden' name='id'" .
                      "value=" . $data['id'] . ">".
                     "<button class='btn btn-danger' type='submit', name='delete'> DELETE </button> </form> </td>".
-                    "</tr>";
+                    "</form></tr>";
             }
             echo "</table></table></center></body></html>";
         }
@@ -91,9 +91,9 @@ class UserAuth extends Dbh{
 
     public function deleteUser($id){
         $conn = $this->connect();
-        $sql = "DELETE FROM students WHERE id = '$id'";
-        if($conn->query($sql) === TRUE){
-            header("refresh:0.5; url=action.php?all");
+        $sql = "DELETE FROM students WHERE id = $id";
+        if($conn->query($sql) == TRUE){
+            header("refresh:0.5; url=./dashboard.php");
         } else {
             header("refresh:0.5; url=action.php?all=?message=Error");
         }
@@ -101,9 +101,9 @@ class UserAuth extends Dbh{
 
     public function updateUser($username, $password){
         $conn = $this->connect();
-        $sql = "UPDATE users SET password = '$password' WHERE username = '$username'";
-        if($conn->query($sql) === TRUE){
-            header("Location: ../dashboard.php?update=success");
+        $sql = "UPDATE students SET password = '$password' WHERE email = '$username'";
+        if($conn->query($sql) == TRUE){
+            header("Location: ./dashboard.php?update=success");
         } else {
             header("Location: forms/resetpassword.php?error=1");
         }
@@ -111,7 +111,7 @@ class UserAuth extends Dbh{
 
     public function getUserByUsername($username){
         $conn = $this->connect();
-        $sql = "SELECT * FROM users WHERE username = '$username'";
+        $sql = "SELECT * FROM students WHERE email = '$username'";
         $result = $conn->query($sql);
         if($result->num_rows > 0){
             return $result->fetch_assoc();
