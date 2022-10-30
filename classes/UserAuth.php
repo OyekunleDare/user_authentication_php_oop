@@ -10,7 +10,7 @@ class UserAuth extends Dbh{
     }
 
     public function register($fullname, $email, $password, $confirmPassword, $country, $gender){
-        $conn = $this->connect();
+        $conn = $this->db->connect();
         if($this->confirmPasswordMatch($password, $confirmPassword)){
 			$check = "SELECT * FROM students WHERE email = '$email'";
 			$result = $conn->query($check);
@@ -30,7 +30,7 @@ class UserAuth extends Dbh{
     }
 
     public function login($email, $password){
-        $conn = $this->connect();
+        $conn = $this->db->connect();
         $sql = "SELECT * FROM students WHERE email='$email' AND `password`='$password'";
         $result = $conn->query($sql);
         if($result->num_rows > 0){
@@ -44,7 +44,7 @@ class UserAuth extends Dbh{
     }
 
     public function getUser($username){
-        $conn = $this->connect();
+        $conn = $this->db->connect();
         $sql = "SELECT * FROM users WHERE username = '$username'";
         $result = $conn->query($sql);
         if($result->num_rows > 0){
@@ -55,7 +55,7 @@ class UserAuth extends Dbh{
     }
 
     public function getAllUsers(){
-        $conn = $this->connect();
+        $conn = $this->db->connect();
         $sql = "SELECT * FROM students";
         $result = $conn->query($sql);
         echo"<html>
@@ -90,7 +90,7 @@ class UserAuth extends Dbh{
     }
 
     public function deleteUser($id){
-        $conn = $this->connect();
+        $conn = $this->db->connect();
         $sql = "DELETE FROM students WHERE id = $id";
         if($conn->query($sql) == TRUE){
             header("refresh:0.5; url=./dashboard.php");
@@ -100,7 +100,7 @@ class UserAuth extends Dbh{
     }
 
     public function updateUser($username, $password){
-        $conn = $this->connect();
+        $conn = $this->db->connect();
         $sql = "UPDATE students SET password = '$password' WHERE email = '$username'";
         if($conn->query($sql) == TRUE){
             header("Location: ./dashboard.php?update=success");
@@ -110,7 +110,7 @@ class UserAuth extends Dbh{
     }
 
     public function getUserByUsername($username){
-        $conn = $this->connect();
+        $conn = $this->db->connect();
         $sql = "SELECT * FROM students WHERE email = '$username'";
         $result = $conn->query($sql);
         if($result->num_rows > 0){
