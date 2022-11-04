@@ -26,6 +26,12 @@
         <form class="form-control w-50" method="POST" action="../action.php">
             <h1 class="form-group">Reset Password</h1>
             <hr>
+			<?php if(isset($_GET['error']) )
+                echo "<p class='alert alert-danger text-center'>Password Update Not Successful</p>";
+            ?>
+			<?php if(isset($_GET['errors']) )
+                echo "<p class='alert alert-danger text-center'>You can't use the same password</p>";
+            ?>
             <div class="form-row flex justify-content-center">
                 <div class="form-group">
                     <label for="email">Email</label>
