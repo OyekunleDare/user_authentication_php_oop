@@ -27,14 +27,20 @@
         <form class="form-control w-50" method="POST" action="../action.php">
             <h1 class="form-group">Register</h1>
             <hr>
+			<?php if(isset($_GET['emailexist']) )
+                echo "<p class='alert alert-danger text-center'>Email already exist in our database</p>";
+            ?>
+			<?php if(isset($_GET['password']) )
+                echo "<p class='alert alert-danger text-center'>Password and Confirm Password does not match</p>";
+            ?>
             <div class="form-row flex justify-content-center">
                 <div class="form-group">
                     <label for="fullnames">Full Names</label>
-                    <input type="text" class="form-control" id="fullnames" placeholder="Full Names" name="fullnames" required>
+                    <input type="text" class="form-control" id="fullnames" placeholder="Full Names" name="fullnames" required value="<?php if(isset($_POST['fullnames'])){ echo $_POST['fullnames']; }?>">
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="Email" name="email" required>
+                    <input type="email" class="form-control" id="email" placeholder="Email" name="email" required value="<?php if(isset($_POST['email'])){ echo $_POST['email']; }?>">
                 </div>
                 
                 <div class="form-group">
