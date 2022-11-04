@@ -12,20 +12,20 @@ class UserAuth extends Dbh{
     public function register($fullname, $email, $password, $confirmPassword, $country, $gender){
         $conn = $this->db->connect();
         if($this->confirmPasswordMatch($password, $confirmPassword)){
-			$check = "SELECT * FROM students WHERE email = '$email'";
-			$result = $conn->query($check);
-			if($result->num_rows < 1){
+			//$check = "SELECT * FROM students WHERE email = '$email'";
+			//$result = $conn->query($check);
+			if(!$this->checkEmailExist($email)){
             $sql = "INSERT INTO students (`full_names`, `email`, `password`, `country`, `gender`) VALUES ('$fullname','$email', '$password', '$country', '$gender')";
             if($conn->query($sql)){
-               echo "REGISTRATION SUCCESSFUL <br/>Please <a href='forms/login.php'>click</a> here to login";
+               header("Location:forms/login.php?regsuc=1");
             } else {
                 echo "Opps". $conn->error;
             }
 			}else{
-				echo "Email already exist in our system";
+				header("Location:forms/register.php?emailexist=1");
 			}
         } else{
-			echo "Password and Confirm Password does not match";
+			header("Location:forms/register.php?password=1");
 		}       
     }
 
@@ -39,7 +39,7 @@ class UserAuth extends Dbh{
 			$_SESSION['username'] = $arr['full_names'];
             header("Location:./dashboard.php");
         } else {
-            header("Location:forms/login.php");
+            header("Location:forms/login.php?message=1");
         }
     }
 
@@ -101,12 +101,20 @@ class UserAuth extends Dbh{
 
     public function updateUser($username, $password){
         $conn = $this->db->connect();
+		$chk = "SELECT * FROM students WHERE email = '$username'";
+		$chks = $conn->query($chk);
+		$pass1 = mysqli_fetch_array($chks);
+		$chkpass = $pass1['password'];
+		if($chkpass != $password){
         $sql = "UPDATE students SET password = '$password' WHERE email = '$username'";
-        if($conn->query($sql) == TRUE){
-            header("Location: ./dashboard.php?update=success");
+        if($conn->query($sql)){
+            header("Location: forms/login.php?update=success");
         } else {
             header("Location: forms/resetpassword.php?error=1");
         }
+		}else{
+			header("Location: forms/resetpassword.php?errors=1");
+		}
     }
 
     public function getUserByUsername($username){
@@ -119,6 +127,17 @@ class UserAuth extends Dbh{
             return false;
         }
     }
+	
+	public function checkEmailExist($email){
+		$conn = $this->db->connect();
+		$sql = "SELECT * FROM students WHERE email = '$email'";
+		$result = $conn->query($sql);
+		if($result->num_rows > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
 
     public function logout($username){
         session_start();
